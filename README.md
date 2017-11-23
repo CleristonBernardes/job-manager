@@ -1,7 +1,5 @@
-# Postfix Notation
-Calculates the postfix notation for spreadsheets considering its reference to different cells.
-
-Expects a csv input file
+# Job Manager
+Manage tradies' job assignment
 
 
 ## Execute the API
