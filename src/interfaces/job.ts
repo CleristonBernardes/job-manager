@@ -5,5 +5,6 @@ export default interface IJob {
   customer_name?: string,
   email?: string,
   mobile?: string,
-  status?: string
+  status?: string,
+  active: boolean
 }

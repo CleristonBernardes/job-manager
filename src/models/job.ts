@@ -12,6 +12,10 @@ const jobSchema = new Schema({
     type: String,
     default: "New",
     enum: ["New", "Assigned", "Hired"]
+  },
+  active: {
+    type: Boolean,
+    default: true
   }
 }, { timestamps: false });
 

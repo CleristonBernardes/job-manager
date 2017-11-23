@@ -1,0 +1,16 @@
+{
+  "server":{
+    "port": 3000
+  },
+  "db": {
+    "connection": "",
+    "connection_test": ""
+  },
+  "api":{
+    "url" : "",
+    "cache_time": 10,   //in sec
+    "status":{
+      "success": 200
+    }
+  }
+}
