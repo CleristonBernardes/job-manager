@@ -10,8 +10,8 @@ const jobSchema = new Schema({
   mobile: String,
   status: {
     type: String,
-    default: "New",
-    enum: ["New", "Assigned", "Hired"]
+    default: "new",
+    enum: ["new", "assigned", "hired"]
   },
   active: {
     type: Boolean,

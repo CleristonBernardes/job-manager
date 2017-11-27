@@ -57,4 +57,9 @@ typings/
 # dotenv environment variables file
 .env
 
+test-report.xml
 package-lock.json
+dist/
+.DS_Store
+src/.DS_Store
+src/models/.DS_Store

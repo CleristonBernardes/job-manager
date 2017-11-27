@@ -3,7 +3,7 @@ Manage tradies' job assignment
 
 
 ## Execute the API
-node 8.4.0
+- node 8.4.0
 ```sh
 $ npm install
 $ npm start
