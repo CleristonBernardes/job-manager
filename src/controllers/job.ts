@@ -30,11 +30,3 @@ export const getById = (params: any, done: DefaultResultCallback) => {
   const {id} = params;
   _JobModel.findById(id, done);
 };
-
-export const assingTradieToJob = (params: any, done: DefaultResultCallback) => {
-  const {job_id, tradie_id} = params
-  if (!job_id) {return done(new Error("Inform the job."))}
-  if (!tradie_id) {return done(new Error("Inform a tradie."))}
-  const {id} = params;
-  _JobModel.findById(id, done);
-};

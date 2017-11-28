@@ -3,5 +3,5 @@ export default interface ITradie {
   email?: string,
   name?: string,
   active: boolean,
-  is_hired?: boolean
+  jobs?: string[]
 }

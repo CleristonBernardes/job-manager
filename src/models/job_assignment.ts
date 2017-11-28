@@ -10,12 +10,14 @@ const jobAssignmentSchema = new Schema({
   job: {
     data: Schema.Types.ObjectId, //for populate
     description: String,
-    category: String
+    category: String,
+    status: String
   },
   tradie: {
     data: Schema.Types.ObjectId, //for populate
     email: String,
-    name: String
+    name: String,
+    is_hired: Boolean
   }
 }, { timestamps: true });
 

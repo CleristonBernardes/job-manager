@@ -9,10 +9,7 @@ const tradieSchema = new Schema({
     type: Boolean,
     default: true
   },
-  is_hired:{
-    type: Boolean,
-    default: false
-  }
+  jobs: [String]
 }, { timestamps: true });
 
 export interface ITradieModel extends ITradie, Document {}

@@ -38,18 +38,34 @@ export class Mock<T extends Document> {
     done(undefined, _.find(this.list_data, (l)=> { return l._id.toString() === id.toString()}));
   }
 
-  public find = (params: any, done:DefaultResultCallback) => {
+  private findSync = (params: any) => {
     params = params || {};
     const temp_list = this.list_data.map((d) => { return flatten(d); });
     let filtered = _.where(temp_list, params);
-    filtered = filtered.map((d) => { return unflatten(d); });
-    done(undefined, filtered);
+    return filtered.map((d) => { return unflatten(d); });
+  }
+
+  public find = (params: any, done:DefaultResultCallback) => {
+    done(undefined, this.findSync(params));
+  }
+
+  private findOneSync = (params: any) => {
+    params = params || {};
+    const temp_list = this.list_data.map((d) => { return flatten(d); });
+    return unflatten(_.findWhere(this.list_data, params));
   }
 
   public findOne = (params: any, done:DefaultResultCallback) => {
-    params = params || {};
-    const temp_list = this.list_data.map((d) => { return flatten(d); });
-    done(undefined, unflatten(_.findWhere(this.list_data, params)));
+    done(undefined, this.findOneSync(params));
   }
 
+  public update = (conditions:any, update: any, options: any, done:DefaultResultCallback) => {
+    const to_update = options.multi ? this.findSync(conditions) : this.findOneSync(conditions);
+    for (let data of this.list_data){
+      if (_.findWhere([data], conditions)){
+        data = _.extend(flatten(data.toObject()), flatten(update));
+      }
+    }
+    done(undefined, this.list_data)
+  }
 }
