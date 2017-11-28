@@ -37,7 +37,7 @@ const deactivateAssignamentsByJob = (params: any, done: DefaultResultCallback) =
 export const assingTradieToJob = (params: any, done: DefaultResultCallback) => {
   const {job_id, tradie_id, description} = params
   if (!job_id) {return done(new Error("Inform the job."))}
-  if (!tradie_id) {return done(new Error("Inform a tradie."))}
+  if (!tradie_id) {return done(new Error("Inform the tradie."))}
   async.parallel({
     job: (n) => {Job_Control.getById({id:job_id}, n)},
     tradie: (n) => {Tradie_Control.getById({id:tradie_id}, n)},
@@ -45,6 +45,7 @@ export const assingTradieToJob = (params: any, done: DefaultResultCallback) => {
   }, (err: Error, {job, tradie, job_assign})=>{
     if (err) {return done(err)}
     if (!job) {return done(new Error("Invalid job."))}
+    if (job.status === "hired") {return done(new Error("There is a tradie already hired for this job."))}
     if (!tradie) {return done(new Error("Invalid tradie."))}
     if (job_assign) {return done(new Error("Tradie already assigned to this job."))}
     async.parallel({
@@ -90,8 +91,8 @@ export const hireTradie = (params: any, done: DefaultResultCallback) => {
         job_updated: (n) => {Job_Control.save(job, n)},
         tradie_updated: (n) => {Tradie_Control.save(tradie, n)},
         job_assign_updated: (n) => {deactivateAssignamentsByJob({job_id: job._id}, n)}
-      }, (err: Error, {job_updatedob, tradie_updated, job_assign_updated})=>{
-        done(undefined, {job_updatedob, tradie_updated})
+      }, (err: Error, {job_updated, tradie_updated, job_assign_updated})=>{
+        done(undefined, {job_updated, tradie_updated, job_assign_updated})
       });
     });
   });

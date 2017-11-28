@@ -7,7 +7,7 @@ import * as async       from "async"
 import * as mongoose    from "mongoose";
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = config.test.DEFAULT_TIMEOUT_INTERVAL
-
+// todo: create error messages as contantes and then on tests
 describe("key_manager", () => {
   const job_list = {}
   const tradie_list = {}
@@ -45,7 +45,6 @@ describe("key_manager", () => {
         }, n) 
       }
     }, (err, {job_new, assigned, hired, tradie_max, tradie_tomas, max_pipe}) => {
-      // console.info("max_pipe", max_pipe)
       job_list["job_new"] = job_new;
       job_list["assigned"] = assigned;
       job_list["hired"] = hired;
@@ -58,10 +57,11 @@ describe("key_manager", () => {
 
   it(`getAssignmentsByJob`, done => {
     JobAssign.getAssignmentsByJob({job_id: mongoose.Types.ObjectId("5a1acaa8d91a8c5804336601")}, (err: any, job_assigns: any[]) => {
-      // console.info(job_assigns, "job_assigns")
       expect(err).toBeUndefined();
       expect(job_assigns).toBeDefined();
       expect(job_assigns.length).toBeGreaterThanOrEqual(1);
+      expect(job_assigns[0].job).toBeDefined();
+      expect(job_assigns[0].job.data).toBeDefined();
       done();
     });
   });
@@ -78,7 +78,7 @@ describe("key_manager", () => {
     });
   });
 
-  it(`assingTradieToJob invalid`, done => {
+  it(`assingTradieToJob already assigned`, done => {
     JobAssign.assingTradieToJob({
       job_id: mongoose.Types.ObjectId("5a1acaa8d91a8c5804336601"),
       tradie_id: mongoose.Types.ObjectId("5a1acaa8d91a8c5804336600"),
@@ -91,16 +91,93 @@ describe("key_manager", () => {
     });
   });
 
-  it(`hireTradie`, done => {
-    JobAssign.hireTradie({
-      job_assign_id: job_assign["max_pipe"]._id
+  it(`assingTradieToJob already hired`, done => {
+    JobAssign.assingTradieToJob({
+      job_id: mongoose.Types.ObjectId("5a1acaa8d91a8c5804336602"),
+      tradie_id: mongoose.Types.ObjectId("5a1acaa8d91a8c5804336600"),
+      description: "assingTradieToJob"
     }, (err: any, response: any[]) => {
-      // console.info(err, "any", response)
-      expect(err).toBeUndefined();
-      expect(response).toBeDefined();
+      // console.info(err,"any", response)
+      expect(err).toBeDefined();
+      expect(response).toBeUndefined();
       done();
     });
   });
 
+  it(`assingTradieToJob no tradie`, done => {
+    JobAssign.assingTradieToJob({
+      job_id: mongoose.Types.ObjectId("5a1acaa8d91a8c5804336601"),
+      description: "assingTradieToJob"
+    }, (err: any, response: any[]) => {
+      expect(err).toBeDefined();
+      expect(response).toBeUndefined();
+      done();
+    });
+  });
+
+  it(`assingTradieToJob no job`, done => {
+    JobAssign.assingTradieToJob({
+      tradie_id: mongoose.Types.ObjectId("5a1acaa8d91a8c5804336600"),
+      description: "assingTradieToJob"
+    }, (err: any, response: any[]) => {
+      expect(err).toBeDefined();
+      expect(response).toBeUndefined();
+      done();
+    });
+  });
+
+    
+  it(`assingTradieToJob invalid job`, done => {
+    JobAssign.assingTradieToJob({
+      job_id: mongoose.Types.ObjectId("6a1acaa8d91a8c5804336601"),
+      tradie_id: mongoose.Types.ObjectId("5a1acaa8d91a8c5804336601"),
+      description: "assingTradieToJob"
+    }, (err: any, response: any[]) => {
+      // console.info(err,"any", response)
+      expect(err).toBeDefined();
+      expect(response).toBeUndefined();
+      done();
+    });
+  });
+
+      
+  it(`assingTradieToJob invalid tradie`, done => {
+    JobAssign.assingTradieToJob({
+      job_id: mongoose.Types.ObjectId("5a1acaa8d91a8c5804336601"),
+      tradie_id: mongoose.Types.ObjectId("6a1acaa8d91a8c5804336601"),
+      description: "assingTradieToJob"
+    }, (err: any, response: any) => {
+      expect(err).toBeDefined();
+      expect(response).toBeUndefined();
+      done();
+    });
+  });
+
+  it(`hireTradie`, done => {
+    JobAssign.hireTradie({
+      job_assign_id: job_assign["max_pipe"]._id
+    }, (err: any, response: any) => {
+      expect(err).toBeUndefined();
+      expect(response).toBeDefined();
+      expect(response.job_updated).toBeDefined();
+      expect(response.job_updated.status).toBeDefined();
+      expect(response.job_updated.status).toBe("hired");
+      expect(response.tradie_updated).toBeDefined();
+      expect(response.tradie_updated.jobs).toBeDefined();
+      expect(response.tradie_updated.jobs).toHaveLength(1)
+      done();
+    });
+  });
+
+
+  it(`hireTradie invalid assignment`, done => {
+    JobAssign.hireTradie({
+      job_assign_id: mongoose.Types.ObjectId("6a1acaa8d91a8c5804336601")
+    }, (err: any, response: any[]) => {
+      expect(err).toBeDefined();
+      expect(response).toBeUndefined();
+      done();
+    });
+  });
 
 });
