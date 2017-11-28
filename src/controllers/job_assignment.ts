@@ -39,8 +39,8 @@ export const assingTradieToJob = (params: any, done: DefaultResultCallback) => {
   if (!job_id) {return done(new Error("Inform the job."))}
   if (!tradie_id) {return done(new Error("Inform a tradie."))}
   async.parallel({
-    job: (n) => {Job_Control.getById(job_id, n)},
-    tradie: (n) => {Tradie_Control.getById(tradie_id, n)},
+    job: (n) => {Job_Control.getById({id:job_id}, n)},
+    tradie: (n) => {Tradie_Control.getById({id:tradie_id}, n)},
     job_assign: (n) => {_JobAssignmentModel.findOne({"job.data": job_id, "tradie.data": tradie_id}, n)}
   }, (err: Error, {job, tradie, job_assign})=>{
     if (err) {return done(err)}
@@ -63,20 +63,26 @@ export const assingTradieToJob = (params: any, done: DefaultResultCallback) => {
   });
 };
 
+export const getAssignmentsByJob = (params: any, done: DefaultResultCallback) => {
+  const {job_id} = params
+  if (!job_id) {return done(new Error("Inform the job."))}
+  _JobAssignmentModel.find({"job.data": job_id}, done);
+}
+
 export const hireTradie = (params: any, done: DefaultResultCallback) => {
   const {job_assign_id} = params;
   _JobAssignmentModel.findById(job_assign_id, (err: Error, job_assign: IJobAssignmentModel)=>{
     if (err) {return done(err)}
     if (!job_assign) {return done(new Error("Invalid assignment."))}
     async.parallel({
-      job: (n) => {Job_Control.getById(job_assign.job.data, n)},
-      tradie: (n) => {Tradie_Control.getById(job_assign.tradie.data, n)}
+      job: (n) => {Job_Control.getById({id:job_assign.job.data}, n)},
+      tradie: (n) => {Tradie_Control.getById({id:job_assign.tradie.data}, n)}
     }, (err: Error, {job,tradie})=>{
       if (err) {return done(err)}
       if (!job) {return done(new Error("Job not found for this assignment."))}
       if (!tradie) {return done(new Error("Tradie not found for this assignment."))}
-      if (tradie.jobs && tradie.jobs.indexOf(job._id.toString()) > -1) { return done(new Error("The tradie is already hired."))}
-      if (job.status === "hired") { return done(new Error("There is already a tradie hired for this job."))}
+      if (tradie.jobs && tradie.jobs.indexOf(job._id.toString()) > -1) { return done(new Error("The tradie is already hired for this job."))}
+      if (job.status === "hired") { return done(new Error("There is another tradie hired for this job."))}
       tradie.jobs = tradie.jobs || []
       tradie.jobs.push(job._id.toString())
       job.status = "hired"
@@ -89,7 +95,5 @@ export const hireTradie = (params: any, done: DefaultResultCallback) => {
         done(undefined, {job_updatedob, tradie_updated})
       });
     });
-
   });
-
 }
