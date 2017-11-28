@@ -6,7 +6,7 @@
     "connection":  "mongodb://localhost/job_manager"
   },
   "api":{
-    "cache_time": 10,   //in sec
+    "cache_time": 30,   //in sec
     "status":{
       "success": 200,
       "error": 500,

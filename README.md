@@ -56,6 +56,11 @@ $ npm start
     }
 * [/hire/:job_assign_id](/hire/:5a1d330907983dce5e2199ea) - (POST) Mark a tradie as hired.
 
+## Notes
+- Only job and tradie are cached. Configured for 30seconds.
+- Once the tradie is hired, all the assigmnents are canceled.
+
+
 ## Test considerations
 
 ### Config
