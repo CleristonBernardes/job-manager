@@ -8,7 +8,7 @@ import * as mongoose    from "mongoose";
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = config.test.DEFAULT_TIMEOUT_INTERVAL
 // todo: create error messages as contantes and then on tests
-describe("key_manager", () => {
+describe("job_assignment", () => {
   const job_list = {}
   const tradie_list = {}
   const job_assign = {}

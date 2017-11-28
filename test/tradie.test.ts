@@ -5,7 +5,7 @@ import * as async       from "async"
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = config.test.DEFAULT_TIMEOUT_INTERVAL
 
-describe("key_manager", () => {
+describe("tradie", () => {
   const tradie_list = {}
   beforeAll((done) => {
     async.parallel({
