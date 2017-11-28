@@ -40,7 +40,7 @@ export class Mock<T extends Document> {
 
   private findSync = (params: any) => {
     params = params || {};
-    const temp_list = this.list_data.map((d) => { return flatten(d); });
+    const temp_list = this.list_data.map((d) => { return flatten(d.toObject()); });
     let filtered = _.where(temp_list, params);
     return filtered.map((d) => { return unflatten(d); });
   }
@@ -51,7 +51,7 @@ export class Mock<T extends Document> {
 
   private findOneSync = (params: any) => {
     params = params || {};
-    const temp_list = this.list_data.map((d) => { return flatten(d); });
+    const temp_list = this.list_data.map((d) => { return flatten(d.toObject()); });
     return unflatten(_.findWhere(this.list_data, params));
   }
 
