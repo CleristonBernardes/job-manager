@@ -91,7 +91,6 @@ export const hireTradie = (params: any, done: DefaultResultCallback) => {
         tradie_updated: (n) => {Tradie_Control.save(tradie, n)},
         job_assign_updated: (n) => {deactivateAssignamentsByJob({job_id: job._id}, n)}
       }, (err: Error, {job_updatedob, tradie_updated, job_assign_updated})=>{
-        console.info("{job_updatedob, tradie_updated, job_assign_updated}", {job_updatedob, tradie_updated, job_assign_updated})
         done(undefined, {job_updatedob, tradie_updated})
       });
     });
