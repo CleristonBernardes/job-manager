@@ -38,7 +38,7 @@ describe("key_manager", () => {
   it(`getById`, done => {
     const id = tradie_list["tradie_max"]._id.toString();
     Tradie.getById({id}, (err: any, tradie: any) => {
-      console.info(err, "tradie", tradie)
+      // console.info(err, "tradie", tradie)
       expect(err).toBeUndefined();
       expect(tradie).toBeDefined();
       expect(tradie._id.toString()).toBe(id);

@@ -39,9 +39,24 @@ export class Mock<T extends Document> {
   }
 
   private findSync = (params: any) => {
-    params = params || {};
+    params = flatten(params) || {};
     const temp_list = this.list_data.map((d) => { return flatten(d.toObject()); });
-    let filtered = _.where(temp_list, params);
+
+    // console.info("temp_list", temp_list, "params", params)
+    let filtered = temp_list.map((l)=>{
+      let valid = true;
+      for(const key in params){
+        // console.info("key", key, params[key] != l[key]);
+        if (params[key].toString() != l[key].toString()){
+          valid = false
+        }
+      }
+      if (valid) {
+        return l
+      }
+    });
+    filtered = _.filter(filtered, (f)=>{ return f})
+    // console.info("filtered", filtered)
     return filtered.map((d) => { return unflatten(d); });
   }
 
@@ -50,9 +65,8 @@ export class Mock<T extends Document> {
   }
 
   private findOneSync = (params: any) => {
-    params = params || {};
-    const temp_list = this.list_data.map((d) => { return flatten(d.toObject()); });
-    return unflatten(_.findWhere(this.list_data, params));
+    this.findSync(params);
+    return _.first(this.findSync(params));
   }
 
   public findOne = (params: any, done:DefaultResultCallback) => {

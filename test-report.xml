@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite id="0" name="/Users/cleriston/Personal/job-manager/test/job.test.test.ts" errors="0" package="/Users/cleriston/Personal/job-manager/test/job.test.test.ts" hostname="localhost" tests="3" failures="0" time="1.369" timestamp="2017-11-28T10:44:48">
+  <testsuite id="0" name="/Users/cleriston/Personal/job-manager/test/job_assignment.test.ts" errors="0" package="/Users/cleriston/Personal/job-manager/test/job_assignment.test.ts" hostname="localhost" tests="4" failures="0" time="1.153" timestamp="2017-11-28T11:40:14">
+    <properties>
+    </properties>
+    <testcase classname="key_manager" name="getAssignmentsByJob" time="0">
+    </testcase>
+    <testcase classname="key_manager" name="assingTradieToJob" time="0">
+    </testcase>
+    <testcase classname="key_manager" name="assingTradieToJob invalid" time="0">
+    </testcase>
+    <testcase classname="key_manager" name="hireTradie" time="0">
+    </testcase>
+    <system-out/>
+    <system-err/>
+  </testsuite>
+  <testsuite id="1" name="/Users/cleriston/Personal/job-manager/test/job.test.ts" errors="0" package="/Users/cleriston/Personal/job-manager/test/job.test.ts" hostname="localhost" tests="3" failures="0" time="0.105" timestamp="2017-11-28T11:40:15">
     <properties>
     </properties>
     <testcase classname="key_manager" name="getAllActive" time="0">
@@ -12,7 +26,7 @@
     <system-out/>
     <system-err/>
   </testsuite>
-  <testsuite id="1" name="/Users/cleriston/Personal/job-manager/test/tradie.test.ts" errors="0" package="/Users/cleriston/Personal/job-manager/test/tradie.test.ts" hostname="localhost" tests="3" failures="0" time="0.114" timestamp="2017-11-28T10:44:49">
+  <testsuite id="2" name="/Users/cleriston/Personal/job-manager/test/tradie.test.ts" errors="0" package="/Users/cleriston/Personal/job-manager/test/tradie.test.ts" hostname="localhost" tests="3" failures="0" time="0.285" timestamp="2017-11-28T11:40:15">
     <properties>
     </properties>
     <testcase classname="key_manager" name="getAllActive" time="0">

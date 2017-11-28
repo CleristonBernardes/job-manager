@@ -29,7 +29,7 @@ export const getAllActive = (done: DefaultResultCallback) => {
   _JobAssignmentModel.find({active: true}, done);
 };
 
-export const deactivateAssignamentsByJob = (params: any, done: DefaultResultCallback) => {
+const deactivateAssignamentsByJob = (params: any, done: DefaultResultCallback) => {
   const {job_id} = params
   _JobAssignmentModel.update({"job.data": job_id}, {active: false}, {multi: true}, done);
 };

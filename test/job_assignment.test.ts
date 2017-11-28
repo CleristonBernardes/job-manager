@@ -1,12 +1,17 @@
 import * as config      from "config"
-import * as Job   from "../src/controllers/job"
+import * as Job         from "../src/controllers/job"
+import * as Tradie      from "../src/controllers/tradie"
+import * as JobAssign   from "../src/controllers/job_assignment"
 import { testExecute }  from "./utils"
 import * as async       from "async"
+import * as mongoose    from "mongoose";
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = config.test.DEFAULT_TIMEOUT_INTERVAL
 
 describe("key_manager", () => {
   const job_list = {}
+  const tradie_list = {}
+  const job_assign = {}
   beforeAll((done) => {
     async.parallel({
       job_new: (n)=> { 
@@ -16,54 +21,83 @@ describe("key_manager", () => {
       },
       assigned: (n)=> { 
         Job.save({
-          _id: "5a1acaa8d91a8c5804336601", category: "garden", description: "Garden cleaner", email: "thegarden@gmail.com", status: "assigned"
+          _id: "5a1acaa8d91a8c5804336601", category: "pipe", description: "Garden cleaner", email: "thegarden@gmail.com", status: "assigned"
         }, n) 
       },
       hired: (n)=> { 
         Job.save({
-          _id: "5a1acaa8d91a8c5804336602", category: "garden", description: "Garden cleaner", email: "thegarden@gmail.com", status: "hired"
+          _id: "5a1acaa8d91a8c5804336602", category: "teatcher", description: "Tradie courses", email: "teach@gmail.com", status: "hired"
+        }, n) 
+      },
+      tradie_max: (n)=> { 
+        Tradie.save({
+          _id: "5a1acaa8d91a8c5804336600", name: "Max", email: "max@gmail.com"
+        }, n) 
+      },
+      tradie_tomas: (n)=> { 
+        Tradie.save({
+          _id: "5a1acaa8d91a8c5804336601", name: "Tomas", email: "tomas@gmail.com"
+        }, n) 
+      },
+      max_pipe: (n)=> { 
+        JobAssign.assingTradieToJob({
+          job_id: "5a1acaa8d91a8c5804336601", tradie_id: "5a1acaa8d91a8c5804336600", description: "test"
         }, n) 
       }
-    }, (err, {job_new, assigned, hired}) => {
-      // console.info( {job_new, assigned, hired})
+    }, (err, {job_new, assigned, hired, tradie_max, tradie_tomas, max_pipe}) => {
+      // console.info("max_pipe", max_pipe)
       job_list["job_new"] = job_new;
       job_list["assigned"] = assigned;
       job_list["hired"] = hired;
+      tradie_list["tradie_max"] = tradie_max;
+      tradie_list["tradie_tomas"] = tradie_tomas;
+      job_assign["max_pipe"] = max_pipe.new_job_assign;
       done(err);
     });
   });
 
-  it(`getAllActive`, done => {
-    Job.getAllActive((err: any, jobs: any[]) => {
-      console.info(jobs, "jobs")
+  it(`getAssignmentsByJob`, done => {
+    JobAssign.getAssignmentsByJob({job_id: mongoose.Types.ObjectId("5a1acaa8d91a8c5804336601")}, (err: any, job_assigns: any[]) => {
+      // console.info(job_assigns, "job_assigns")
       expect(err).toBeUndefined();
-      expect(jobs).toBeDefined();
-      expect(jobs.length).toBeGreaterThanOrEqual(3);
+      expect(job_assigns).toBeDefined();
+      expect(job_assigns.length).toBeGreaterThanOrEqual(1);
+      done();
+    });
+  });
+  
+  it(`assingTradieToJob`, done => {
+    JobAssign.assingTradieToJob({
+      job_id: mongoose.Types.ObjectId("5a1acaa8d91a8c5804336601"),
+      tradie_id: mongoose.Types.ObjectId("5a1acaa8d91a8c5804336601"),
+      description: "assingTradieToJob"
+    }, (err: any, response: any[]) => {
+      expect(err).toBeNull();
+      expect(response).toBeDefined();
       done();
     });
   });
 
-  it(`getById`, done => {
-    const id = job_list["job_new"]._id.toString();
-    Job.getById({id}, (err: any, job: any) => {
-      // console.info(err, "job", job)
-      expect(err).toBeUndefined();
-      expect(job).toBeDefined();
-      expect(job._id.toString()).toBe(id);
+  it(`assingTradieToJob invalid`, done => {
+    JobAssign.assingTradieToJob({
+      job_id: mongoose.Types.ObjectId("5a1acaa8d91a8c5804336601"),
+      tradie_id: mongoose.Types.ObjectId("5a1acaa8d91a8c5804336600"),
+      description: "assingTradieToJob"
+    }, (err: any, response: any[]) => {
+      // console.info(err,"any", response)
+      expect(err).toBeDefined();
+      expect(response).toBeUndefined();
       done();
     });
   });
 
-  it(`save`, done => {
-    Job.save({category: "new", description: "new new", email: "new@new.com"}, (err: any, job: any) => {
+  it(`hireTradie`, done => {
+    JobAssign.hireTradie({
+      job_assign_id: job_assign["max_pipe"]._id
+    }, (err: any, response: any[]) => {
+      // console.info(err, "any", response)
       expect(err).toBeUndefined();
-      expect(job).toBeDefined();
-      expect(job.status).toBeDefined();
-      expect(job.status).toBe("new");
-      expect(job.category).toBeDefined();
-      expect(job.category).toBe("new");
-      expect(job.email).toBeDefined();
-      expect(job.email).toBe("new@new.com");
+      expect(response).toBeDefined();
       done();
     });
   });

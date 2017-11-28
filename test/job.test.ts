@@ -35,7 +35,7 @@ describe("key_manager", () => {
 
   it(`getAllActive`, done => {
     Job.getAllActive((err: any, jobs: any[]) => {
-      console.info(jobs, "jobs")
+      // console.info(jobs, "jobs")
       expect(err).toBeUndefined();
       expect(jobs).toBeDefined();
       expect(jobs.length).toBeGreaterThanOrEqual(3);
