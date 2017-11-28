@@ -4,10 +4,57 @@ Manage tradies' job assignment
 
 ## Execute the API
 - node 8.4.0
+- local mongoDB instance
+
 ```sh
 $ npm install
 $ npm start
 ```
+
+## Endpoints
+* [/jobs](/jobs) - (GET) Get jobs.
+* [/tradies](/tradies) - (GET) Get tradies.
+* [/job/:id](/job/5a1d330907983dce5e2199ea) - (GET) Get job by ID.
+* [/tradie/:id](/job/5a1d330907983dce5e2199ea) - (GET) Get tradie by ID.
+* [/jobs/assignments/:job_id](/jobs/assignments/5a1d330907983dce5e2199ea) - (GET) Get job assignments.
+
+
+* [/job](/job) - (POST) Creates a job.
+  * params {
+      postcode: String,
+      category: String,
+      description: String,
+      customer_name: String,
+      email: String,
+      mobile: String,
+      status: {
+        type: String,
+        default: "new",
+        enum: ["new", "assigned", "hired"]
+      },
+      active: {
+        type: Boolean,
+        default: true
+      }
+    }
+* [/tradie](/tradie) - (POST) Creates a tradie.
+  * params {
+      mobile: String,
+      email: String,
+      name: String,
+      active: {
+        type: Boolean,
+        default: true
+      },
+      jobs: [String]
+    }
+* [/assign](/assign) - (POST) Assign a tradie to a job.
+  * params {
+      job_id: String,
+      tradie_id: String,
+      description: String
+    }
+* [/hire/:job_assign_id](/hire/:5a1d330907983dce5e2199ea) - (POST) Mark a tradie as hired.
 
 ## Test considerations
 

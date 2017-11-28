@@ -53,8 +53,8 @@ const dispatch =  (req: Request, res: Response, next: NextFunction) => {
 
 // GET
 router.get(`/jobs`, runMethod(Job_Control.getAllActive, false), dispatch);
-router.get(`/job/:id`, runMethod(Job_Control.getById), dispatch);
 router.get(`/tradies`, runMethod(Tradie_Control.getAllActive, false), dispatch);
+router.get(`/job/:id`, runMethod(Job_Control.getById), dispatch);
 router.get(`/tradie/:id`, runMethod(Tradie_Control.getById), dispatch);
 router.get(`/jobs/assignments/:job_id`, runMethod(Job_Assign_Control.getAssignmentsByJob), dispatch);
 
