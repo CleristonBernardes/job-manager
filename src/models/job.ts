@@ -17,7 +17,7 @@ const jobSchema = new Schema({
     type: Boolean,
     default: true
   }
-}, { timestamps: false });
+}, { timestamps: true });
 
 export interface IJobModel extends IJob, Document {}
 export const JobModel = model<IJobModel>("job", jobSchema);

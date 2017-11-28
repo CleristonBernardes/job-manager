@@ -53,5 +53,19 @@ describe("key_manager", () => {
     });
   });
 
+  it(`save`, done => {
+    Job.save({category: "new", description: "new new", email: "new@new.com"}, (err: any, job: any) => {
+      expect(err).toBeUndefined();
+      expect(job).toBeDefined();
+      expect(job.status).toBeDefined();
+      expect(job.status).toBe("new");
+      expect(job.category).toBeDefined();
+      expect(job.category).toBe("new");
+      expect(job.email).toBeDefined();
+      expect(job.email).toBe("new@new.com");
+      done();
+    });
+  });
+
 
 });

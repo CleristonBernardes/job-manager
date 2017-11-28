@@ -8,8 +8,12 @@ const tradieSchema = new Schema({
   active: {
     type: Boolean,
     default: true
+  },
+  is_hired:{
+    type: Boolean,
+    default: false
   }
-}, { timestamps: false });
+}, { timestamps: true });
 
 export interface ITradieModel extends ITradie, Document {}
 export const TradieModel = model<ITradieModel>("tradie", tradieSchema);

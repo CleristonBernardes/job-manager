@@ -40,13 +40,16 @@ export class Mock<T extends Document> {
 
   public find = (params: any, done:DefaultResultCallback) => {
     params = params || {};
-    done(undefined, _.where(this.list_data, params));
+    const temp_list = this.list_data.map((d) => { return flatten(d); });
+    let filtered = _.where(temp_list, params);
+    filtered = filtered.map((d) => { return unflatten(d); });
+    done(undefined, filtered);
   }
 
   public findOne = (params: any, done:DefaultResultCallback) => {
     params = params || {};
-    const filtered = _.where(this.list_data, params)
-    done(undefined, filtered.length > 0 ? filtered[0] : []);
+    const temp_list = this.list_data.map((d) => { return flatten(d); });
+    done(undefined, unflatten(_.findWhere(this.list_data, params)));
   }
 
 }

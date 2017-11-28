@@ -2,7 +2,10 @@ import { IJobModel, JobModel }  from "../models/job"
 import * as config              from "config"
 import * as _                   from "underscore"
 import * as async               from "async"
-import { cacheWrapper }         from "./utils"
+import {
+  cacheWrapper,
+  setSave
+}from "./utils"
 import { Model }                from "mongoose"
 import { Mock }                 from "../models/mock/mocks"
 
@@ -17,21 +20,21 @@ if (_test_){
   _JobModel = JobModel;
 }
 
-export const save = (params: any, done: DefaultResultCallback) => {
-  if (_test_){
-    params = params.toObject? params.toObject() : params;
-    _JobModel.save(params, done);
-  }else{
-    const new_key = new _JobModel(params);
-    new_key.save(done);
-  }
-}
+export const save = setSave(_JobModel);
 
 export const getAllActive = cacheWrapper("job.getAllActive", (done: DefaultResultCallback) => {
   _JobModel.find({active: true}, done);
 });
 
 export const getById = (params: any, done: DefaultResultCallback) => {
+  const {id} = params;
+  _JobModel.findById(id, done);
+};
+
+export const assingTradieToJob = (params: any, done: DefaultResultCallback) => {
+  const {job_id, tradie_id} = params
+  if (!job_id) {return done(new Error("Inform the job."))}
+  if (!tradie_id) {return done(new Error("Inform a tradie."))}
   const {id} = params;
   _JobModel.findById(id, done);
 };
